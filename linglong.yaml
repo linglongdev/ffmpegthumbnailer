@@ -1,0 +1,33 @@
+package:
+  id: ffmpegthumbnailer
+  version: 2.1.1.2
+  kind: lib
+
+runtime:
+  id: org.deepin.Runtime
+  version: 20.5.0
+
+source:
+  kind: git
+  url: https://github.com/deepin-community/ffmpegthumbnailer.git
+  version: 2.1.1
+  commit: 5a1d4fbf81970e7bef3116899b0332e734f0b0f5
+  patch: []
+variables:
+  conf_args: |
+    -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+    -DCMAKE_INSTALL_LIBDIR=lib/${TRIPLET} \
+    -DCMAKE_INSTALL_BINDIR=bin \
+    -DLIB_INSTALL_DIR=lib/${TRIPLET} \
+    -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_OFF" \
+    -DCMAKE_BUILD_TYPE=Release
+
+build:
+  kind: manual
+  manual:
+    configure: |
+      [ -d build ] && rm -r build || true
+      mkdir -p build && cd build
+      cmake ${conf_args} ..
+      make ${jobs} && make install
+
